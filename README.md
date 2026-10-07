@@ -5,7 +5,7 @@
 
 ## Team Members
 *   Vishesh M - PES1UG25AM451
-*   Vishnu M S - PES1UG25AM452
+*   Vishnu Marangat Sankaran - PES1UG25AM452
 *   Yuvaraj Karam - PES1UG25AM458
 *   Vihaan Vishwanath Siddini - PES1UG25AM448
 
