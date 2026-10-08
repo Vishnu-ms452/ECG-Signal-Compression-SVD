@@ -20,7 +20,7 @@ This project represents the ECG dataset as a matrix (rows = heartbeats, columns 
 
 ## Method
 
-1. **Load data:** read `ecg.csv` with Pandas and convert it to a NumPy matrix `A`.
+1. **Load data:** read `ecg.csv` with Pandas and convert it to a NumPy matrix `A`.(got the dataset ecg.csv from kaggle)
 2. **Decompose:** compute the SVD, `A = UΣVᵀ`.
 3. **Truncate:** keep the top `k` singular values to form `Uₖ`, `Σₖ` and `Vₖᵀ`.
 4. **Reconstruct:** `Aₖ = UₖΣₖVₖᵀ` using matrix multiplication.
