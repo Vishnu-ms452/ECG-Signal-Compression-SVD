@@ -17,7 +17,7 @@ def main():
 
     # 3. Truncation and Basis Formation
     # k is the number of singular values we keep. 
-    # Try changing this to 2, 5, or 10 during your demo!
+    # We have used k=5 here but you can use whatever k value you want
     k = 5 
     U_k = U[:, :k]
     S_k = np.diag(S[:k])
@@ -30,7 +30,7 @@ def main():
     # --- Analytics & Validation ---
     mse = mean_squared_error(ecg_matrix, compressed_ecg_matrix)
     
-    # Calculate compression ratio
+    # Compression ratio calculation
     original_size = ecg_matrix.size
     compressed_size = U_k.size + S[:k].size + Vt_k.size
     compression_ratio = original_size / compressed_size
