@@ -1,49 +1,98 @@
-# ECG Data Compression using Singular Value Decomposition (SVD)
+# ECG Data Compression using SVD
 
-**Course:** UE25MA242A – Mathematical Foundation for AI & Data Science (MFAD 2026)  
-**Mini Project – Experiential Learning Level 2 (Orange Problem)**
+Compressing and denoising ECG heartbeat signals with a truncated Singular Value Decomposition (SVD).
 
-## Team Members
-*   Vishesh M - PES1UG25AM451
-*   Vishnu Marangat Sankaran - PES1UG25AM452
-*   Yuvaraj Karam - PES1UG25AM458
-*   Vihaan Vishwanath Siddini - PES1UG25AM448
+**Course:** UE25MA242A – Mathematical Foundation for AI & Data Science
 
-## Project Objective
-This project demonstrates the practical application of linear algebra in the medical data science domain. We use **Singular Value Decomposition (SVD)** to compress high-dimensional physiological time-series data (ECG readings). By factorizing the data matrix and retaining only the dominant singular values, we isolate the critical QRS waveform structures from baseline noise, drastically reducing data size while preserving diagnostic fidelity.
+**Team:**
+- Vishesh M (PES1UG25AM451)
+- Vishnu Marangat Sankaran (PES1UG25AM452)
+- Vihaan Vishwanath Siddini (PES1UG25AM448)
+- Yuvaraj Karam (PES1UG25AM458)
 
-## Mathematical Concepts Applied
-1. **Matrix Representation:** Converting 141-column tabular time-series data into an $m \times n$ mathematical matrix.
-2. **Singular Value Decomposition ($A = U \Sigma V^T$):** Decomposing the dataset to extract orthogonal matrices and singular values.
-3. **Basis Formation and Truncation:** Slicing matrices to retain only the top $k$ components (dominant signals).
-4. **Signal Reconstruction:** Utilizing matrix multiplication (dot products) to rebuild the compressed signal.
-5. **Error Calculation:** Using Mean Squared Error (MSE) to quantify data loss mathematically.
+---
 
-## Setup Instructions
-To run this project locally, ensure you have Python 3 installed on your system. 
+## Overview
 
-1. **Clone the repository:**
-   ```bash
-   git clone <your-repo-link>
-   cd <your-repo-folder>
-   ```
+Continuous ECG monitoring produces large amounts of high-dimensional time-series data, and raw signals are costly to store and transmit. They are also affected by baseline wander and high-frequency noise.
 
-2. **Install required dependencies:**
-   The project requires standard data science libraries. Install them using pip:
-   ```bash
-   pip install pandas numpy matplotlib scikit-learn
-   ```
+This project represents the ECG dataset as a matrix (rows = heartbeats, columns = time-step voltage samples) and applies SVD to keep only the dominant waveform patterns. Large singular values capture the main heartbeat structure (such as the QRS complex), while the small trailing components mostly contain noise.
 
-3. **Add the Dataset:**
-   Ensure the `ecg.csv` file (containing the numerical voltage readings without text headers) is placed in the same root directory as `main.py`.
+## Method
 
-## How to Run the Project
-Execute the main Python script from your terminal:
+1. **Load data:** read `ecg.csv` with Pandas and convert it to a NumPy matrix `A`.
+2. **Decompose:** compute the SVD, `A = UΣVᵀ`.
+3. **Truncate:** keep the top `k` singular values to form `Uₖ`, `Σₖ` and `Vₖᵀ`.
+4. **Reconstruct:** `Aₖ = UₖΣₖVₖᵀ` using matrix multiplication.
+5. **Evaluate:** compute the mean squared error (MSE) and the compression ratio, then plot the original signal against the reconstruction.
+
+## Requirements
+
+- Python 3.8+
+- pandas
+- numpy
+- matplotlib
+- scikit-learn
+
+Install them with:
+
+```bash
+pip install pandas numpy matplotlib scikit-learn
+```
+
+## Usage
+
+1. Place your dataset as `ecg.csv` in the same folder as the script. The file should have no header row, with each row being one heartbeat and each column one time step.
+2. Run the script:
+
 ```bash
 python main.py
 ```
 
-## Expected Output (Deliverables)
-Upon successful execution, the program will output:
-1. **Terminal Metrics:** The original matrix shape, the calculated Data Compression Ratio, and the Mean Squared Error (MSE) comparing the original vs. reconstructed signal.
-2. **Visual Demo:** A Matplotlib graph comparing the original noisy ECG wave against the newly compressed SVD wave side-by-side. 
+3. To change the number of retained components, edit this line in the script:
+
+```python
+k = 5   # try 2, 5, 10, ...
+```
+
+## Output
+
+The script prints:
+
+- the original matrix shape
+- the **compression ratio**, calculated as `original size / (size of Uₖ + Σₖ + Vₖᵀ)`
+- the **mean squared error** between the original and reconstructed matrices
+
+It also shows a plot of the first heartbeat (row 0): the original noisy ECG in light red and the SVD-compressed version in dark red.
+
+## Results (k = 5)
+
+| Metric | Value |
+|---|---|
+| Signal columns | 141 |
+| Retained components (k) | 5 |
+| Compression ratio | ~4.2× |
+| MSE | ~0.001 |
+
+The reconstruction keeps the QRS complex while smoothing jagged inter-beat noise.
+
+> **Note:** These are project-reported results from this demonstration, not general or clinical validation.
+
+## Future Work
+
+- Test across more ECG records and different values of `k`.
+- Evaluate the compressed signals as inputs to predictive models such as CNNs, and compare task performance before and after compression.
+
+## File Structure
+
+```
+.
+├── main.py     # SVD compression script
+├── ecg.csv     # ECG dataset (not included, add your own)
+└── README.md
+```
+````
+
+- **Script name:** I assumed `main.py`, so change it if yours is named differently.
+- **Dataset:** Add a line about where `ecg.csv` came from if you want to credit it.
+- **Results table:** The numbers come from your slides, since I haven't run the code.
